@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg:          #0B0A08;
+  --bg-card:     #141210;
+  --bg-border:   #2A2620;
+  --cream:       #EDE8DC;
+  --cream-muted: #A89F8C;
+  --cream-faint: #5C5549;
+  --amber:       #C8890A;
+  --amber-light: #E8A020;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Tailwind v4 img reset breaks Leaflet-style absolute-positioned images */
+img { max-width: none; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--cream);
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+a { color: inherit; text-decoration: none; }

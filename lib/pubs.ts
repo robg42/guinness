@@ -1,28 +1,54 @@
+export type Zone    = 'central' | 'north' | 'east' | 'south' | 'west';
+export type Feature = 'beer_garden' | 'fire' | 'dog_friendly' | 'good_roast' | 'historic' | 'live_music' | 'riverside' | 'hipster' | 'sports';
+
 export type Pub = {
-  id:           string;
-  name:         string;
+  id:            string;
+  name:          string;
   neighbourhood: string;
-  address:      string;
-  rating:       number;   // 1–5
-  description:  string;
-  note?:        string;   // short personal note
-  price:        '£' | '££' | '£££';
-  lat:          number;
-  lng:          number;
+  address:       string;
+  rating:        number;   // 1–5
+  description:   string;
+  note?:         string;
+  price:         '£' | '££' | '£££';
+  zone:          Zone;
+  features:      Feature[];
+  image:         string;   // URL — swap for real pub photo
+  lat:           number;
+  lng:           number;
 };
 
+export const FEATURE_LABELS: Record<Feature, string> = {
+  beer_garden: 'Beer Garden',
+  fire:        'Has a Fire',
+  dog_friendly:'Dog Friendly',
+  good_roast:  'Good Roast',
+  historic:    'Historic',
+  live_music:  'Live Music',
+  riverside:   'Riverside',
+  hipster:     'Hipster',
+  sports:      'Shows Sports',
+};
+
+// Picsum seeds give consistent images — replace with real pub photos when you have them
+const img = (seed: string) => `https://picsum.photos/seed/${seed}/800/480`;
+
 export const PUBS: Pub[] = [
+
+  // ── CENTRAL ──────────────────────────────────────────────────────────────
+
   {
     id:            'harp',
     name:          'The Harp',
     neighbourhood: 'Covent Garden',
     address:       '47 Chandos Pl, London WC2N 4HS',
     rating:        5,
-    description:   'CAMRA Pub of the Year and arguably London\'s finest pint. Small, packed, no-nonsense. The Guinness here is poured slowly and properly — creamy head, settled perfectly. Get there early.',
+    description:   'CAMRA Pub of the Year and London\'s benchmark pint. Small, packed, no-nonsense. Poured slowly and properly — creamy head, perfectly settled. Get there early.',
     note:          'My benchmark. Every other pint gets compared to this one.',
     price:         '££',
-    lat:           51.5093,
-    lng:           -0.1258,
+    zone:          'central',
+    features:      ['historic'],
+    image:         img('harp-covent'),
+    lat:  51.5093, lng: -0.1258,
   },
   {
     id:            'porterhouse',
@@ -30,11 +56,27 @@ export const PUBS: Pub[] = [
     neighbourhood: 'Covent Garden',
     address:       '21-22 Maiden Lane, London WC2E 7NA',
     rating:        5,
-    description:   'Irish brewery bar spread across several atmospheric floors. The Guinness is exceptional — they take the two-part pour seriously and the lines are kept immaculate. A proper Dublin pub transported to London.',
+    description:   'Irish brewery bar spread across several atmospheric floors. They take the two-part pour seriously and the lines are kept immaculate. A proper Dublin pub transported to London.',
     note:          'Best spot for a quiet first pint before the evening gets going.',
     price:         '££',
-    lat:           51.5114,
-    lng:           -0.1232,
+    zone:          'central',
+    features:      ['historic'],
+    image:         img('porterhouse-london'),
+    lat:  51.5114, lng: -0.1232,
+  },
+  {
+    id:            'devonshire',
+    name:          'The Devonshire',
+    neighbourhood: 'Soho',
+    address:       '17 Denman St, London W1D 7HW',
+    rating:        5,
+    description:   'The Devonshire\'s comeback was the pub story of the decade. Stripped back and restored to its bones, it now serves one of the finest pints in central London with matching food to back it up. Always busy, always worth it.',
+    note:          'Don\'t skip the upstairs — the atmosphere up there on a Friday evening is hard to beat.',
+    price:         '££',
+    zone:          'central',
+    features:      ['good_roast', 'hipster'],
+    image:         img('devonshire-soho'),
+    lat:  51.5103, lng: -0.1335,
   },
   {
     id:            'toucan',
@@ -42,11 +84,13 @@ export const PUBS: Pub[] = [
     neighbourhood: 'Soho',
     address:       '19 Carlisle St, London W1D 3BY',
     rating:        4,
-    description:   'Tiny, legendary Soho boozer dedicated almost entirely to Guinness. Toucan-themed throughout. Gets extremely packed but that\'s part of the charm. The pint is reliably excellent.',
+    description:   'Tiny, legendary Soho boozer dedicated almost entirely to Guinness. Toucan-themed throughout. Gets extremely packed but that\'s part of the charm.',
     note:          'More of an experience than a pub. Go on a Tuesday afternoon.',
     price:         '££',
-    lat:           51.5148,
-    lng:           -0.1320,
+    zone:          'central',
+    features:      ['historic'],
+    image:         img('toucan-soho'),
+    lat:  51.5148, lng: -0.1320,
   },
   {
     id:            'mulligans',
@@ -54,33 +98,82 @@ export const PUBS: Pub[] = [
     neighbourhood: 'Mayfair',
     address:       '13-14 Cork St, London W1S 3NS',
     rating:        4,
-    description:   'Proper old-school Irish pub tucked behind Bond Street, serving Mayfair since the eighties. The Guinness is beautifully poured and the bar staff know what they\'re doing. Quieter than the Covent Garden spots.',
+    description:   'Proper old-school Irish pub tucked behind Bond Street, serving Mayfair since the eighties. Quieter than the Covent Garden spots — the pint gets the attention it deserves.',
     note:          'Great for a long, unhurried afternoon pint.',
     price:         '££',
-    lat:           51.5104,
-    lng:           -0.1418,
+    zone:          'central',
+    features:      ['historic'],
+    image:         img('mulligans-mayfair'),
+    lat:  51.5104, lng: -0.1418,
   },
   {
     id:            'devereaux',
-    name:          'Devereux',
+    name:          'The Devereux',
     neighbourhood: 'Temple',
     address:       '20 Devereux Ct, London WC2R 3JJ',
     rating:        4,
-    description:   'Hidden down a Strand alley in old legal London, the Devereux is a proper drinker\'s pub. The Guinness is consistently well-kept and the barristers who prop up the bar look like they\'ve been there since 1887.',
+    description:   'Hidden down a Strand alley in old legal London. The Guinness is consistently well-kept and the barristers who prop up the bar look like they\'ve been there since 1887.',
     price:         '£',
-    lat:           51.5129,
-    lng:           -0.1133,
+    zone:          'central',
+    features:      ['historic'],
+    image:         img('devereux-temple'),
+    lat:  51.5129, lng: -0.1133,
   },
   {
-    id:            'black-lion',
-    name:          'The Black Lion',
-    neighbourhood: 'Hammersmith',
-    address:       '2 South Black Lion Lane, London W6 9TJ',
+    id:            'princess-louise',
+    name:          'The Princess Louise',
+    neighbourhood: 'Holborn',
+    address:       '208-209 High Holborn, London WC1V 7EP',
     rating:        4,
-    description:   'Beautiful old riverside pub with a garden. Not the most Irish of pubs but they keep a cracking Guinness — lines are always clean, pour is always patient. One of West London\'s best.',
+    description:   'One of London\'s most beautiful Victorian pub interiors — ornate tilework, etched glass and carved wood from 1891. The Guinness is reliably good and the setting is unmatched.',
     price:         '££',
-    lat:           51.4921,
-    lng:           -0.2365,
+    zone:          'central',
+    features:      ['historic'],
+    image:         img('princess-louise-holborn'),
+    lat:  51.5171, lng: -0.1193,
+  },
+
+  // ── NORTH ─────────────────────────────────────────────────────────────────
+
+  {
+    id:            'auld-shillelagh',
+    name:          'The Auld Shillelagh',
+    neighbourhood: 'Stoke Newington',
+    address:       '105 Stoke Newington Church St, London N16 0UD',
+    rating:        5,
+    description:   'A proper Irish pub in Stokey that does everything right. The Guinness is exceptional, there\'s live music most nights, a fire in winter, and a genuine community feel that\'s been there for decades. This is the one.',
+    note:          'Go on a Thursday night for trad music. Stay longer than you planned.',
+    price:         '£',
+    zone:          'north',
+    features:      ['fire', 'live_music', 'historic', 'dog_friendly'],
+    image:         img('auld-shillelagh-stokey'),
+    lat:  51.5632, lng: -0.0768,
+  },
+  {
+    id:            'flask-highgate',
+    name:          'The Flask',
+    neighbourhood: 'Highgate',
+    address:       '77 Highgate West Hill, London N6 6BU',
+    rating:        4,
+    description:   'A Highgate institution since the 1660s, sitting on the edge of the village green. The Guinness is well-kept and there\'s a proper fire in winter. Worth the hill climb.',
+    price:         '££',
+    zone:          'north',
+    features:      ['fire', 'historic', 'dog_friendly', 'beer_garden'],
+    image:         img('flask-highgate'),
+    lat:  51.5713, lng: -0.1466,
+  },
+  {
+    id:            'bull-and-last',
+    name:          'The Bull & Last',
+    neighbourhood: 'Dartmouth Park',
+    address:       '168 Highgate Rd, London NW5 1QS',
+    rating:        4,
+    description:   'One of North London\'s finest gastropubs, a short walk from Parliament Hill. The Guinness is excellent and the Sunday roast is genuinely one of the best in London.',
+    price:         '£££',
+    zone:          'north',
+    features:      ['good_roast', 'dog_friendly', 'hipster'],
+    image:         img('bull-last-dartmouth'),
+    lat:  51.5567, lng: -0.1467,
   },
   {
     id:            'crown-islington',
@@ -90,20 +183,215 @@ export const PUBS: Pub[] = [
     rating:        3,
     description:   'A neighbourhood pub that takes its Guinness seriously in a borough that doesn\'t always bother. Quieter than central options, which means the pint gets the attention it deserves.',
     price:         '£',
-    lat:           51.5360,
-    lng:           -0.1073,
+    zone:          'north',
+    features:      ['dog_friendly'],
+    image:         img('crown-islington'),
+    lat:  51.5360, lng: -0.1073,
   },
+  {
+    id:            'george-islington',
+    name:          'The George',
+    neighbourhood: 'Islington',
+    address:       '57 The Piazza, Liverpool St, London EC2M 7PY',
+    rating:        3,
+    description:   'A reliable North London local with a good Guinness and a proper pub atmosphere. Unpretentious and consistent — the kind of place you\'d bring your dad.',
+    price:         '£',
+    zone:          'north',
+    features:      ['sports', 'dog_friendly'],
+    image:         img('george-islington'),
+    lat:  51.5176, lng: -0.0821,
+  },
+
+  // ── EAST ──────────────────────────────────────────────────────────────────
+
   {
     id:            'pride-of-spitalfields',
     name:          'Pride of Spitalfields',
     neighbourhood: 'Spitalfields',
     address:       '3 Heneage St, London E1 5LJ',
-    rating:        3,
-    description:   'East London classic — stripped back, no-nonsense, the kind of pub that was here before the neighbourhood got interesting. The Guinness is solid and the prices are honest.',
+    rating:        4,
+    description:   'East London classic — stripped back, no-nonsense, the kind of pub that was here before the neighbourhood got interesting. The Guinness is excellent and the prices are honest.',
     price:         '£',
-    lat:           51.5190,
-    lng:           -0.0730,
+    zone:          'east',
+    features:      ['fire', 'dog_friendly', 'historic'],
+    image:         img('pride-spitalfields'),
+    lat:  51.5190, lng: -0.0730,
+  },
+  {
+    id:            'dove-broadway-market',
+    name:          'The Dove',
+    neighbourhood: 'Broadway Market',
+    address:       '24-28 Broadway Market, London E8 4QJ',
+    rating:        4,
+    description:   'A Hackney favourite on one of London\'s best market streets. Belgian beer list alongside a surprisingly great Guinness. The garden gets packed on weekends but it earns it.',
+    price:         '££',
+    zone:          'east',
+    features:      ['beer_garden', 'hipster'],
+    image:         img('dove-broadway-market'),
+    lat:  51.5394, lng: -0.0570,
+  },
+  {
+    id:            'approach-tavern',
+    name:          'The Approach Tavern',
+    neighbourhood: 'Bethnal Green',
+    address:       '47 Approach Rd, London E2 9LY',
+    rating:        3,
+    description:   'A free house in Bethnal Green with a rotating guest ale list and a solid Guinness. The art gallery upstairs keeps it interesting. A proper local with a bit of edge.',
+    price:         '£',
+    zone:          'east',
+    features:      ['hipster', 'beer_garden'],
+    image:         img('approach-tavern-bethnal'),
+    lat:  51.5306, lng: -0.0499,
+  },
+  {
+    id:            'carpenter-bethnal',
+    name:          'The Carpenter\'s Arms',
+    neighbourhood: 'Bethnal Green',
+    address:       '73 Cheshire St, London E2 6EG',
+    rating:        3,
+    description:   'Small, relaxed local just off Brick Lane. The Guinness here is consistently well-poured and the crowd is a good mix of old East End and the new arrivals. Feels real.',
+    price:         '£',
+    zone:          'east',
+    features:      ['dog_friendly', 'historic'],
+    image:         img('carpenters-bethnal'),
+    lat:  51.5237, lng: -0.0730,
+  },
+
+  // ── SOUTH ─────────────────────────────────────────────────────────────────
+
+  {
+    id:            'anchor-and-hope',
+    name:          'The Anchor & Hope',
+    neighbourhood: 'Waterloo',
+    address:       '36 The Cut, London SE1 8LP',
+    rating:        5,
+    description:   'One of London\'s legendary gastropubs. The Guinness is as carefully considered as the food — clean, cold and perfectly settled. No bookings, but worth the wait.',
+    note:          'Go for the food. Stay for the third pint.',
+    price:         '££',
+    zone:          'south',
+    features:      ['good_roast', 'hipster'],
+    image:         img('anchor-hope-waterloo'),
+    lat:  51.5033, lng: -0.1083,
+  },
+  {
+    id:            'royal-oak-borough',
+    name:          'The Royal Oak',
+    neighbourhood: 'Borough',
+    address:       '44 Tabard St, London SE1 4JU',
+    rating:        4,
+    description:   'A Harvey\'s tied house and one of the great traditional London pubs. The Guinness is beautifully kept and the room feels like it hasn\'t changed in fifty years. That\'s a compliment.',
+    price:         '£',
+    zone:          'south',
+    features:      ['historic', 'good_roast'],
+    image:         img('royal-oak-borough'),
+    lat:  51.4993, lng: -0.0930,
+  },
+  {
+    id:            'mayflower',
+    name:          'The Mayflower',
+    neighbourhood: 'Rotherhithe',
+    address:       '117 Rotherhithe St, London SE16 4NF',
+    rating:        4,
+    description:   'A riverside pub on the Thames dating to 1620. The Guinness is well-kept and the wooden jetty over the river is one of London\'s great spots on a cold afternoon.',
+    price:         '££',
+    zone:          'south',
+    features:      ['riverside', 'historic', 'dog_friendly'],
+    image:         img('mayflower-rotherhithe'),
+    lat:  51.5010, lng: -0.0551,
+  },
+  {
+    id:            'windmill-clapham',
+    name:          'The Windmill',
+    neighbourhood: 'Clapham',
+    address:       '75 Clapham Common South Side, London SW4 9DE',
+    rating:        3,
+    description:   'Overlooking Clapham Common with one of South London\'s better beer gardens. The Guinness is solid and dependable — exactly what you want after a walk on the common.',
+    price:         '££',
+    zone:          'south',
+    features:      ['beer_garden', 'dog_friendly', 'sports'],
+    image:         img('windmill-clapham'),
+    lat:  51.4581, lng: -0.1493,
+  },
+  {
+    id:            'old-nun-head',
+    name:          'The Old Nun\'s Head',
+    neighbourhood: 'Nunhead',
+    address:       '15 Nunhead Green, London SE15 3QQ',
+    rating:        3,
+    description:   'A proper South London local that flies well under the radar. The Guinness is honestly poured, the fire is always going in winter, and the regulars have been there longer than the furniture.',
+    price:         '£',
+    zone:          'south',
+    features:      ['fire', 'dog_friendly'],
+    image:         img('old-nuns-head-nunhead'),
+    lat:  51.4667, lng: -0.0615,
+  },
+
+  // ── WEST ──────────────────────────────────────────────────────────────────
+
+  {
+    id:            'black-lion',
+    name:          'The Black Lion',
+    neighbourhood: 'Hammersmith',
+    address:       '2 South Black Lion Lane, London W6 9TJ',
+    rating:        4,
+    description:   'Beautiful old riverside pub with one of West London\'s better gardens. The Guinness is consistently excellent — lines are clean, pour is patient.',
+    price:         '££',
+    zone:          'west',
+    features:      ['beer_garden', 'riverside', 'dog_friendly', 'historic'],
+    image:         img('black-lion-hammersmith'),
+    lat:  51.4921, lng: -0.2365,
+  },
+  {
+    id:            'windsor-castle',
+    name:          'The Windsor Castle',
+    neighbourhood: 'Notting Hill',
+    address:       '114 Campden Hill Rd, London W8 7AR',
+    rating:        4,
+    description:   'A beautiful Victorian pub hidden up a Notting Hill side street. Dark wood, real fires in every room, and a walled garden that feels impossibly good in summer. The Guinness doesn\'t disappoint.',
+    price:         '££',
+    zone:          'west',
+    features:      ['fire', 'beer_garden', 'historic', 'dog_friendly'],
+    image:         img('windsor-castle-notting-hill'),
+    lat:  51.5076, lng: -0.1993,
+  },
+  {
+    id:            'anglesea-arms',
+    name:          'The Anglesea Arms',
+    neighbourhood: 'Hammersmith',
+    address:       '35 Wingate Rd, London W6 0UR',
+    rating:        4,
+    description:   'A West London gastropub favourite with a serious Guinness game. The Sunday roast is among the best in the borough and the garden is worth fighting for in summer.',
+    price:         '£££',
+    zone:          'west',
+    features:      ['beer_garden', 'good_roast', 'dog_friendly', 'hipster'],
+    image:         img('anglesea-arms-hammersmith'),
+    lat:  51.4937, lng: -0.2268,
+  },
+  {
+    id:            'britannia-kensington',
+    name:          'The Britannia',
+    neighbourhood: 'Kensington',
+    address:       '1 Allen St, London W8 6UX',
+    rating:        3,
+    description:   'A reliable Kensington local with a lovely garden hidden behind the main drag. Young\'s pub — the Guinness is well-managed and the crowd is pleasantly mixed.',
+    price:         '££',
+    zone:          'west',
+    features:      ['beer_garden', 'dog_friendly'],
+    image:         img('britannia-kensington'),
+    lat:  51.4994, lng: -0.1968,
   },
 ];
 
-export const NEIGHBOURHOODS = [...new Set(PUBS.map(p => p.neighbourhood))].sort();
+export const ZONES: { value: Zone | 'all'; label: string }[] = [
+  { value: 'all',     label: 'All'     },
+  { value: 'central', label: 'Central' },
+  { value: 'north',   label: 'North'   },
+  { value: 'east',    label: 'East'    },
+  { value: 'south',   label: 'South'   },
+  { value: 'west',    label: 'West'    },
+];
+
+export const ALL_FEATURES: Feature[] = [
+  'beer_garden', 'fire', 'dog_friendly', 'good_roast',
+  'historic', 'live_music', 'riverside', 'hipster', 'sports',
+];
